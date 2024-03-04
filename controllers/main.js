@@ -8,7 +8,7 @@ function getData() {
       // console.log(res);
       renderDataPills(res.data.navPills);
       renderDatatabPanes(res.data.tabPanes);
-      thuDo(res.data.tabPanes);
+      thuDo();
     })
     .catch((err) => {
       console.log("Error: Không tìm thấy " + err);
@@ -45,7 +45,7 @@ function renderDatatabPanes(arr) {
                </div>
               <div class="clothes_content">
                  <h4>${tabPanes.name}</h4>
-                 <button class="w-100">Thử đồ</button>
+                 <button class="w-100" data-img="${tabPanes.imgSrc_png}" data-type="${tabPanes.type}">Thử đồ</button>
                </div>
             </div>`;
       }
@@ -54,8 +54,8 @@ function renderDatatabPanes(arr) {
   }
 }
 
-function thuDo(arr) {
-  console.log(arr);
+function thuDo() {
+  //console.log("Day la thudo arr", arr);
   let bikinitopDiv = document.querySelector(".contain .bikinitop");
   let bikinibottomDiv = document.querySelector(".contain .bikinibottom");
   let feetDiv = document.querySelector(".contain .feet");
@@ -64,56 +64,45 @@ function thuDo(arr) {
   let hairstyleDiv = document.querySelector(".contain .hairstyle");
   let backgroundDiv = document.querySelector(".contain .background");
   document.querySelector(".contain .body").style.zIndex = 1;
-  let currentTab = "bikinitop";
-  for (var i = 0; i < arr.length; i++) {
-    let getImg = arr[i].imgSrc_png;
-    console.log(getImg);
-    let buttons = document.querySelectorAll(".clothes_content button");
-    buttons[i].addEventListener("click", function () {
-      if (currentTab === "bikinitop") {
-        bikinitopDiv.style.backgroundImage = `url('${getImg}')`;
-        bikinitopDiv.style.backgroundSize = "contain";
-        bikinitopDiv.style.zIndex = "3";
-        bikinitopDiv.style.display = "block";
-        currentTab = "bikinibottom";
-      } else if (currentTab === "bikinibottom") {
-        bikinibottomDiv.style.backgroundImage = `url('${getImg}')`;
-        bikinibottomDiv.style.backgroundSize = "contain";
-        bikinibottomDiv.style.zIndex = "2";
-        bikinibottomDiv.style.display = "block";
-        currentTab = "feet";
-      } else if (currentTab === "feet") {
-        feetDiv.style.backgroundImage = `url('${getImg}')`;
-        feetDiv.style.backgroundSize = "contain";
-        feetDiv.style.zIndex = "1";
-        feetDiv.style.display = "block";
-        currentTab = "handbag";
-      } else if (currentTab === "handbag") {
-        handbagDiv.style.backgroundImage = `url('${getImg}')`;
-        handbagDiv.style.backgroundSize = "contain";
-        handbagDiv.style.zIndex = "3";
-        handbagDiv.style.display = "block";
-        currentTab = "necklace";
-      } else if (currentTab === "necklace") {
-        necklaceDiv.style.backgroundImage = `url('${getImg}')`;
-        necklaceDiv.style.backgroundSize = "contain";
-        necklaceDiv.style.zIndex = "4";
-        necklaceDiv.style.display = "block";
-        currentTab = "hairstyle";
-      } else if (currentTab === "hairstyle") {
-        hairstyleDiv.style.backgroundImage = `url('${getImg}')`;
-        hairstyleDiv.style.backgroundSize = "auto";
-        hairstyleDiv.style.zIndex = "3";
-        hairstyleDiv.style.display = "block";
-        hairstyleDiv.style.backgroundRepeat = "no-repeat";
-        currentTab = "background";
-      } else if (currentTab === "background") {
-        backgroundDiv.style.backgroundImage = `url('${getImg}')`;
-        backgroundDiv.style.backgroundSize = "contain";
-        backgroundDiv.style.zIndex = "0";
-        backgroundDiv.style.display = "block";
-        currentTab = "bikinitop";
+  bikinitopDiv.style.zIndex = 5;
+  let btns = document.querySelectorAll(".clothes_content button");
+  btns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      let imgSrc = e.target.dataset.img;
+      let type = e.target.dataset.type;
+      let element;
+      switch (type) {
+        case "topclothes":
+          element = bikinitopDiv;
+
+          break;
+        case "botclothes":
+          element = bikinibottomDiv;
+          break;
+        case "shoes":
+          element = feetDiv;
+          break;
+        case "handbags":
+          element = handbagDiv;
+          break;
+        case "necklaces":
+          element = necklaceDiv;
+          break;
+        case "hairstyle":
+          element = hairstyleDiv;
+          break;
+        case "background":
+          element = backgroundDiv;
+          break;
       }
+      // console.log(imgSrc, type, 'Đay là:')
+      dressing(imgSrc, element);
     });
-  }
+  });
+}
+function dressing(imgSrc, element) {
+  console.log(element);
+  element.style.backgroundImage = `url(${imgSrc})`;
+  element.style.backgroundSize = "contain";
+  element.style.zIndex = "3";
 }
